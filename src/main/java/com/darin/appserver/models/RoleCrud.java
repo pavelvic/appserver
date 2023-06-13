@@ -2,8 +2,6 @@ package com.darin.appserver.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +9,6 @@ import java.util.Set;
 //TODO Refactor: merge with class Role
 @Entity
 @Table(name = "roles")
-@Data
-@NoArgsConstructor
 public class RoleCrud {
 
     @Id
@@ -30,4 +26,28 @@ public class RoleCrud {
             mappedBy = "roleCruds")
     @JsonIgnore
     private Set<UserCrud> userCruds = new HashSet<>();
+
+    public RoleCrud() {
+
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<UserCrud> getUserCruds() {
+        return userCruds;
+    }
+
+    public void setUserCruds(Set<UserCrud> userCruds) {
+        this.userCruds = userCruds;
+    }
 }

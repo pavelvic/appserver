@@ -1,8 +1,6 @@
 package com.darin.appserver.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,8 +8,6 @@ import java.util.Set;
 //TODO Refactor: merge with class User
 @Entity
 @Table(name = "users")
-@Data
-@NoArgsConstructor
 public class UserCrud {
 
     @Id
@@ -37,10 +33,54 @@ public class UserCrud {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<RoleCrud> roleCruds = new HashSet<>();
 
+    public UserCrud() {
+
+    }
+
     public UserCrud(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<RoleCrud> getRoleCruds() {
+        return roleCruds;
+    }
+
+    public void setRoleCruds(Set<RoleCrud> roleCruds) {
+        this.roleCruds = roleCruds;
     }
 
     public void addRoleCrud(RoleCrud roleCrud) {
