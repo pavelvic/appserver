@@ -12,10 +12,8 @@
 
     <changeSet id="1.0.2" author="pawel">
         <createTable tableName="user_roles">
-
             <column name="user_id" type="BIGINT">
             </column>
-
             <column name="role_id" type="BIGINT">
             </column>
         </createTable>
@@ -45,11 +43,9 @@
         <insert tableName="roles">
             <column name="name" value="ROLE_USER"/>
         </insert>
-
         <insert tableName="roles">
             <column name="name" value="ROLE_MODERATOR"/>
         </insert>
-
         <insert tableName="roles">
             <column name="name" value="ROLE_ADMIN"/>
         </insert>
