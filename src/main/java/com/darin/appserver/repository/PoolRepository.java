@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PoolRepository extends JpaRepository<Pool, Long> {
     List<Pool> findPoolsBySensorsId(Long sensorId);
+    List<Pool> findPoolsByUserCrudsId(Long userId);
 }

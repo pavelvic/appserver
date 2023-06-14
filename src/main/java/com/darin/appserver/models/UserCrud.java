@@ -1,5 +1,6 @@
 package com.darin.appserver.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -32,6 +33,17 @@ public class UserCrud {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<RoleCrud> roleCruds = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "users_pools",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "pool_id")})
+    @JsonIgnore
+    private Set<Pool> pools = new HashSet<>();
 
     public UserCrud() {
 
@@ -83,6 +95,14 @@ public class UserCrud {
         this.roleCruds = roleCruds;
     }
 
+    public Set<Pool> getPools() {
+        return pools;
+    }
+
+    public void setPools(Set<Pool> pools) {
+        this.pools = pools;
+    }
+
     public void addRoleCrud(RoleCrud roleCrud) {
         this.roleCruds.add(roleCrud);
         roleCrud.getUserCruds().add(this);
@@ -93,6 +113,19 @@ public class UserCrud {
         if (roleCrud != null) {
             this.roleCruds.remove(roleCrud);
             roleCrud.getUserCruds().remove(this);
+        }
+    }
+
+    public void addPool(Pool pool) {
+        this.pools.add(pool);
+        pool.getUserCruds().add(this);
+    }
+
+    public void removePool(long poolId) {
+        Pool pool = this.pools.stream().filter(p -> p.getId() == poolId).findFirst().orElse(null);
+        if (pool != null) {
+            this.pools.remove(pool);
+            pool.getUserCruds().remove(this);
         }
     }
 }

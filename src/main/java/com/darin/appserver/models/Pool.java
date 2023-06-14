@@ -1,5 +1,6 @@
 package com.darin.appserver.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -28,6 +29,15 @@ public class Pool {
             joinColumns = {@JoinColumn(name = "pool_id")},
             inverseJoinColumns = {@JoinColumn(name = "sensor_id")})
     private Set<Sensor> sensors = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "pools")
+    @JsonIgnore
+    private Set<UserCrud> userCruds = new HashSet<>();
 
     public Pool() {
 
@@ -64,6 +74,14 @@ public class Pool {
 
     public void setSensors(Set<Sensor> sensors) {
         this.sensors = sensors;
+    }
+
+    public Set<UserCrud> getUserCruds() {
+        return userCruds;
+    }
+
+    public void setUserCruds(Set<UserCrud> userCruds) {
+        this.userCruds = userCruds;
     }
 
     public void addSensor(Sensor sensor) {

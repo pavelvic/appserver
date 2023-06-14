@@ -25,4 +25,8 @@
     <changeSet id="1.1.5" author="pawel">
         <sqlFile path="classpath:db/changelog/sql/generate_default_test_users.sql"/>
     </changeSet>
+
+    <changeSet id="1.1.6" author="pawel">
+        <sqlFile path="classpath:db/changelog/sql/create_users_pools.sql"/>
+    </changeSet>
 </databaseChangeLog>

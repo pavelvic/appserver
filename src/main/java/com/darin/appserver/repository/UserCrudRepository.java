@@ -8,4 +8,5 @@ import java.util.List;
 //TODO Refactor: merge with class UserRepository
 public interface UserCrudRepository extends JpaRepository<UserCrud, Long> {
     List<UserCrud> findUsersByRoleCrudsId(Long roleId);
+    List<UserCrud> findUsersByPoolsId(Long poolId);
 }
