@@ -44,9 +44,9 @@ public class AdminMetricControllerV1 {
         return new ResponseEntity<>(metrics, HttpStatus.OK);
     }
 
-    @GetMapping("/metrics/{id}")
+    @GetMapping("/metrics/{metricId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Metric> getMetricsById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Metric> getMetricsById(@PathVariable(value = "metricId") Long id) {
         Metric metric = metricRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Metric with id = " + id));
         return new ResponseEntity<>(metric, HttpStatus.OK);
     }
@@ -80,9 +80,9 @@ public class AdminMetricControllerV1 {
         return new ResponseEntity<>(metric, HttpStatus.CREATED);
     }
 
-    @PutMapping("/metrics/{id}")
+    @PutMapping("/metrics/{metricId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Metric> updateMetric(@PathVariable("id") long id, @RequestBody Metric metricRequest) {
+    public ResponseEntity<Metric> updateMetric(@PathVariable("metricId") long id, @RequestBody Metric metricRequest) {
         Metric metric = metricRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("MetricId " + id + "not found"));
         metric.setName(metricRequest.getName());
         metric.setDescription(metricRequest.getDescription());
@@ -100,9 +100,9 @@ public class AdminMetricControllerV1 {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/metrics/{id}")
+    @DeleteMapping("/metrics/{metricId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<HttpStatus> deleteMetric(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deleteMetric(@PathVariable("metricId") long id) {
         metricRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

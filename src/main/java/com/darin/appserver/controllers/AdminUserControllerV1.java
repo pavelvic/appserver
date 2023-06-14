@@ -33,9 +33,9 @@ public class AdminUserControllerV1 {
         return new ResponseEntity<>(userCruds, HttpStatus.OK);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<UserCrud> getUserById(@PathVariable("id") long id) {
+    public ResponseEntity<UserCrud> getUserById(@PathVariable("userId") long id) {
         UserCrud userCrud = userCrudRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found User with id = " + id));
         return new ResponseEntity<>(userCrud, HttpStatus.OK);
@@ -48,9 +48,9 @@ public class AdminUserControllerV1 {
         return new ResponseEntity<>(_userCrud, HttpStatus.CREATED);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/users/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<UserCrud> updateUser(@PathVariable("id") long id, @RequestBody UserCrud userCrud) {
+    public ResponseEntity<UserCrud> updateUser(@PathVariable("userId") long id, @RequestBody UserCrud userCrud) {
         UserCrud _userCrud = userCrudRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found User with id = " + id));
         _userCrud.setUsername(userCrud.getUsername());
@@ -59,9 +59,9 @@ public class AdminUserControllerV1 {
         return new ResponseEntity<>(userCrudRepository.save(_userCrud), HttpStatus.OK);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/users/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("userId") long id) {
         userCrudRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

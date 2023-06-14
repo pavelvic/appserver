@@ -2,13 +2,10 @@ package com.darin.appserver.controllers;
 
 import com.darin.appserver.exception.ResourceNotFoundException;
 import com.darin.appserver.models.Pool;
-import com.darin.appserver.models.RoleCrud;
 import com.darin.appserver.models.UserCrud;
 import com.darin.appserver.repository.PoolRepository;
-import com.darin.appserver.repository.RoleCrudRepository;
 import com.darin.appserver.repository.UserCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,9 +33,9 @@ public class AdminPoolControllerV1 {
         return new ResponseEntity<>(pools, HttpStatus.OK);
     }
 
-    @GetMapping("/pools/{id}")
+    @GetMapping("/pools/{poolId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Pool> getPoolById(@PathVariable("id") long id) {
+    public ResponseEntity<Pool> getPoolById(@PathVariable("poolId") long id) {
         Pool pool = poolRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Pool with id = " + id));
         return new ResponseEntity<>(pool, HttpStatus.OK);
@@ -51,9 +48,9 @@ public class AdminPoolControllerV1 {
         return new ResponseEntity<>(_pool, HttpStatus.CREATED);
     }
 
-    @PutMapping("/pools/{id}")
+    @PutMapping("/pools/{poolId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Pool> updatePool(@PathVariable("id") long id, @RequestBody Pool pool) {
+    public ResponseEntity<Pool> updatePool(@PathVariable("poolId") long id, @RequestBody Pool pool) {
         Pool _pool = poolRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Pool with id = " + id));
         _pool.setName(pool.getName());
@@ -61,9 +58,9 @@ public class AdminPoolControllerV1 {
         return new ResponseEntity<>(poolRepository.save(_pool), HttpStatus.OK);
     }
 
-    @DeleteMapping("/pools/{id}")
+    @DeleteMapping("/pools/{poolId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<HttpStatus> deletePool(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deletePool(@PathVariable("poolId") long id) {
         poolRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

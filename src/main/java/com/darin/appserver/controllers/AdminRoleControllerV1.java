@@ -44,9 +44,9 @@ public class AdminRoleControllerV1 {
         return new ResponseEntity<>(roleCruds, HttpStatus.OK);
     }
 
-    @GetMapping("/roles/{id}")
+    @GetMapping("/roles/{roleId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<RoleCrud> getRolesById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<RoleCrud> getRolesById(@PathVariable(value = "roleId") Long id) {
         RoleCrud roleCrud = roleCrudRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Role with id = " + id));
         return new ResponseEntity<>(roleCrud, HttpStatus.OK);
     }
@@ -80,9 +80,9 @@ public class AdminRoleControllerV1 {
         return new ResponseEntity<>(roleCrud, HttpStatus.CREATED);
     }
 
-    @PutMapping("/roles/{id}")
+    @PutMapping("/roles/{roleId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<RoleCrud> updateRole(@PathVariable("id") long id, @RequestBody RoleCrud roleCrudRequest) {
+    public ResponseEntity<RoleCrud> updateRole(@PathVariable("roleId") long id, @RequestBody RoleCrud roleCrudRequest) {
         RoleCrud roleCrud = roleCrudRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("RoleId " + id + "not found"));
         roleCrud.setName(roleCrudRequest.getName());
         return new ResponseEntity<>(roleCrudRepository.save(roleCrud), HttpStatus.OK);
@@ -97,9 +97,9 @@ public class AdminRoleControllerV1 {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/roles/{id}")
+    @DeleteMapping("/roles/{roleId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<HttpStatus> deleteRole(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deleteRole(@PathVariable("roleId") long id) {
         roleCrudRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

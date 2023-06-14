@@ -2,11 +2,8 @@ package com.darin.appserver.controllers;
 
 import com.darin.appserver.exception.ResourceNotFoundException;
 import com.darin.appserver.models.Pool;
-import com.darin.appserver.models.RoleCrud;
 import com.darin.appserver.models.Sensor;
-import com.darin.appserver.models.UserCrud;
 import com.darin.appserver.repository.PoolRepository;
-import com.darin.appserver.repository.RoleCrudRepository;
 import com.darin.appserver.repository.SensorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,9 +44,9 @@ public class AdminSensorControllerV1 {
         return new ResponseEntity<>(sensors, HttpStatus.OK);
     }
 
-    @GetMapping("/sensors/{id}")
+    @GetMapping("/sensors/{sensorId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Sensor> getSensorById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Sensor> getSensorById(@PathVariable(value = "sensorId") Long id) {
         Sensor sensor = sensorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found Sensor with id = " + id));
         return new ResponseEntity<>(sensor, HttpStatus.OK);
     }
@@ -83,9 +80,9 @@ public class AdminSensorControllerV1 {
         return new ResponseEntity<>(sensor, HttpStatus.CREATED);
     }
 
-    @PutMapping("/sensors/{id}")
+    @PutMapping("/sensors/{sensorId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Sensor> updateSensor(@PathVariable("id") long id, @RequestBody Sensor sensorRequest) {
+    public ResponseEntity<Sensor> updateSensor(@PathVariable("sensorId") long id, @RequestBody Sensor sensorRequest) {
         Sensor sensor = sensorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("SensorId " + id + "not found"));
         sensor.setName(sensorRequest.getName());
         sensor.setDescription(sensorRequest.getDescription());
@@ -101,9 +98,9 @@ public class AdminSensorControllerV1 {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/sensors/{id}")
+    @DeleteMapping("/sensors/{sensorId}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<HttpStatus> deleteSensor(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deleteSensor(@PathVariable("sensorId") long id) {
         sensorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
