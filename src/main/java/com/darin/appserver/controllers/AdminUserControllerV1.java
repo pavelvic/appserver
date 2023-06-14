@@ -4,12 +4,17 @@ import com.darin.appserver.exception.ResourceNotFoundException;
 import com.darin.appserver.models.UserCrud;
 import com.darin.appserver.repository.UserCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +23,10 @@ import java.util.List;
 @RequestMapping("/api/v1/admin/")
 public class AdminUserControllerV1 {
     @Autowired
-    UserCrudRepository userCrudRepository;
+    private UserCrudRepository userCrudRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
@@ -44,7 +49,12 @@ public class AdminUserControllerV1 {
     @PostMapping("/users")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<UserCrud> createUser(@RequestBody UserCrud userCrud) {
-        UserCrud _userCrud = userCrudRepository.save(new UserCrud(userCrud.getUsername(), userCrud.getEmail(), passwordEncoder.encode(userCrud.getPassword())));
+        UserCrud _userCrud = userCrudRepository.save(new UserCrud(
+                userCrud.getUsername(),
+                userCrud.getEmail(),
+                passwordEncoder.encode(userCrud.getPassword()),
+                LocalDateTime.now(ZoneOffset.UTC),
+                LocalDateTime.now(ZoneOffset.UTC)));
         return new ResponseEntity<>(_userCrud, HttpStatus.CREATED);
     }
 
@@ -56,6 +66,8 @@ public class AdminUserControllerV1 {
         _userCrud.setUsername(userCrud.getUsername());
         _userCrud.setEmail(userCrud.getEmail());
         _userCrud.setPassword(userCrud.getPassword());
+        _userCrud.setCreated(userCrud.getCreated());
+        _userCrud.setUpdated(LocalDateTime.now(ZoneOffset.UTC));
         return new ResponseEntity<>(userCrudRepository.save(_userCrud), HttpStatus.OK);
     }
 

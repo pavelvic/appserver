@@ -2,7 +2,12 @@ package com.darin.appserver.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +28,14 @@ public class UserCrud {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "created")
+    @CreatedDate
+    private LocalDateTime created;
+
+    @Column(name = "updated")
+    @LastModifiedDate
+    private LocalDateTime updated;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -49,10 +62,12 @@ public class UserCrud {
 
     }
 
-    public UserCrud(String username, String email, String password) {
+    public UserCrud(String username, String email, String password, LocalDateTime created, LocalDateTime updated) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.created = created;
+        this.updated = updated;
     }
 
     public long getId() {
@@ -101,6 +116,22 @@ public class UserCrud {
 
     public void setPools(Set<Pool> pools) {
         this.pools = pools;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 
     public void addRoleCrud(RoleCrud roleCrud) {
